@@ -1,0 +1,19 @@
+
+<system>
+  <vessel>
+    <outer>
+      <water>
+        volume = 100
+      </water>
+      surface = 10
+      number_vessel = 2
+    </outer>
+    <inner>
+      <water>
+        volume = 100
+      </water>
+      surface = 10
+    </inner>
+  </vessel>
+</system>
+
