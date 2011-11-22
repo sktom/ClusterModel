@@ -1,6 +1,6 @@
 
 class Water
-  attr :volume
+  attr_accessor :volume
 
   def initialize volume
     @volume = volume

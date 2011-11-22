@@ -1,19 +1,20 @@
 
-<system>
-  <vessel>
-    <outer>
-      <water>
-        volume = 100
-      </water>
-      surface = 10
-      number_vessel = 2
-    </outer>
-    <inner>
-      <water>
-        volume = 100
-      </water>
-      surface = 10
-    </inner>
-  </vessel>
-</system>
+<System>
+  NumberTrial = 1000
+  <Vessel>
+    <Outer>
+      Surface = 10
+      NumberVessel = 2
+      <Water>
+        volume = 10000
+      </Water>
+    </Outer>
+    <Inner>
+      Surface = 10
+      <Water>
+        volume = 10000
+      </Water>
+    </Inner>
+  </Vessel>
+</System>
 

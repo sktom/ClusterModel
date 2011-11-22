@@ -1,5 +1,6 @@
 
 require './system'
 
-System.evolve 1000
+System.init
+System.evolve
 
