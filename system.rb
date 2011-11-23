@@ -21,17 +21,8 @@ class << System
   end
 
   def output
-    p OuterVessel.log
-    return if elements.first.log.empty?
-    File.open('res', 'w') do |fout|
-      enumArray = elements.map do |element|
-        element.each
-      end
-      elements.first.log.count.times do
-        fout.puts enumArray.map{|ea| ea.next}.join(' ')
-      end
-    end
-
+    return if OuterVessel.log.empty?
+    OuterVessel.output
   end
 
 

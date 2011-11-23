@@ -11,15 +11,7 @@ class Vessel
   end
 
   def init
-    setting = Setting.System.Vessel 
-    @setting =
-      case self
-      when OuterVessel
-        setting.Outer
-      when InnerVessel
-        setting.Inner
-      end
-    @water = Water.new @setting.Water.volume
+    @water ||= Water.new(@setting.Water.volume)
     @Surface = @setting.Surface
     @log = [height_water]
   end
@@ -34,6 +26,7 @@ class << OuterVessel
 
   alias general_init init
   def init
+    @setting = Setting.System.Vessel.Outer
     general_init
     number_vessel = @setting.NumberVessel 
     @inner_vessels = Array.new(number_vessel).map{
@@ -49,6 +42,17 @@ class << OuterVessel
     @log << height_water
   end
 
+  def output file_name = 'res'
+    File.open(file_name, 'w') do |fout|
+      enum_array = [@log.each].concat @inner_vessels.map{|iv| iv.log.each}
+      @log.count.times do
+        fout.puts enum_array.map{|ea| ea.next}.join(' ')
+      end
+    end
+
+    `gnuplot -persist -e "                                                      
+       plot '#{file_name}' using 1"`
+  end
 
 end
 
@@ -58,15 +62,16 @@ class InnerVessel < Vessel
   end
 
   def initialize
-    init
+    @setting = Setting.System.Vessel.Inner
     @water = Water.new(
       @setting.Water.volume * (1 + (rand * 2 - 1) / 100))
+    init
     @dh = 0
   end
 
   def evolve
     dif_height = OuterVessel.height_water - height_water
-    @dh += dif_height / 10000
+    @dh -= dif_height / 10000
     @water.volume += @dh * @Surface
     @log << height_water
   end
