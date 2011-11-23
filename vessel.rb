@@ -38,20 +38,20 @@ class << OuterVessel
     @inner_vessels.each do |iv|
       iv.evolve
     end
-    @water.volume += @inner_vessels.map{|iv| iv.dv}.inject(:+)
+    @water.volume -= @inner_vessels.map{|iv| iv.dv}.inject(:+)
     @log << height_water
   end
 
   def output file_name = 'res'
     File.open(file_name, 'w') do |fout|
-      enum_array = [@log.each].concat @inner_vessels.map{|iv| iv.log.each}
+      enumArray = [@log.each].concat @inner_vessels.map{|iv| iv.log.each}
       @log.count.times do
-        fout.puts enum_array.map{|ea| ea.next}.join(' ')
+        fout.puts enumArray.map{|ea| ea.next}.join(' ')
       end
     end
-
     `gnuplot -persist -e "                                                      
-       plot '#{file_name}' using 1"`
+       plot #{(1..@inner_vessels.count).map{|i|
+         "'res' u #{i.next} w l"}.join(', ')}"`
   end
 
 end
@@ -71,7 +71,7 @@ class InnerVessel < Vessel
 
   def evolve
     dif_height = OuterVessel.height_water - height_water
-    @dh -= dif_height / 10000
+    @dh += dif_height / 10000
     @water.volume += @dh * @Surface
     @log << height_water
   end
