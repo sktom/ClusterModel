@@ -1,4 +1,3 @@
-#= XML parser for Jasson's project
 
 module XML
 

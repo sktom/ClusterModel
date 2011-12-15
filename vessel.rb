@@ -67,11 +67,19 @@ class InnerVessel < Vessel
       @setting.Water.volume * (1 + (rand * 2 - 1) / 100))
     init
     @dh = 0
+    @stress = 0
   end
 
   def evolve
     dif_height = OuterVessel.height_water - height_water
-    @dh += dif_height / 10000
+    old_dh = @dh
+    ddh = dif_height/ 10000
+    @stress += ddh
+    @stress = 0 if ddh * @stress < 0
+    @dh += ddh - 0.0004
+    if @dh * old_dh < 0
+      @dh = @stress / 2
+    end
     @water.volume += @dh * @Surface
     @log << height_water
   end
